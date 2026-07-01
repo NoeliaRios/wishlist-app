@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lists        WishList[]
+  reservations WishItem[] @relation("ReservedBy")
+  purchases    WishItem[] @relation("PurchasedBy")
+
+  @@map("users")
+}
+
+model WishList {
+  id          String   @id @default(uuid())
+  ownerId     String   @map("owner_id")
+  title       String
+  description String?
+  occasion    String?
+  isActive    Boolean  @default(true) @map("is_active")
+  shareToken  String   @unique @default(uuid()) @map("share_token")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  owner User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  items WishItem[]
+
+  @@map("wish_lists")
+}
+
+model WishItem {
+  id          String     @id @default(uuid())
+  listId      String     @map("list_id")
+  title       String
+  description String?
+  url         String?
+  imageUrl    String?    @map("image_url")
+  priority    Int        @default(2)
+  status      ItemStatus @default(AVAILABLE)
+  reservedBy  String?    @map("reserved_by")
+  purchasedBy String?    @map("purchased_by")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  list            WishList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  reservedByUser  User?    @relation("ReservedBy", fields: [reservedBy], references: [id])
+  purchasedByUser User?    @relation("PurchasedBy", fields: [purchasedBy], references: [id])
+
+  @@map("wish_items")
+}
+
+enum ItemStatus {
+  AVAILABLE
+  RESERVED
+  PURCHASED
+}
