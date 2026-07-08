@@ -50,3 +50,10 @@ export interface CreateItemPayload {
   imageUrl?: string;
   priority?: ItemPriority;
 }
+
+export interface UpdateListPayload {
+  title?: string;
+  description?: string;
+  occasion?: string;
+  isActive?: boolean;
+}
