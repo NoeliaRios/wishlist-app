@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { useListDetail, useDeleteItem, useItemActions } from "../hooks/useListDetail";
+import { useListDetail,  useDeleteItem, useItemActions } from "../hooks/useItems";
 import { WishItemCard } from "../components/WishItemCard";
 import { CreateItemModal } from "../components/CreateItemModal";
 

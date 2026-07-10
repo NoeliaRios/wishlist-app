@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCreateItem } from "../hooks/useListDetail";
+import { useCreateItem } from "../hooks/useItems";
 
 interface Props {
   listId: string;

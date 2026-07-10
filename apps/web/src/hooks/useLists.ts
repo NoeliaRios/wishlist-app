@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import { getLists, createList, deleteList } from "../lib/listsApi";
 import type { CreateListPayload } from "@wishlist/shared";
 
-// Clave del cache — centralizada para no escribirla mal en dos lugares
 export const LISTS_QUERY_KEY = ["lists"];
 
 export function useLists() {
@@ -18,8 +18,8 @@ export function useCreateList() {
   return useMutation({
     mutationFn: (payload: CreateListPayload) => createList(payload),
     onSuccess: () => {
-      // Invalida el cache de listas para que se refetchee automáticamente
       queryClient.invalidateQueries({ queryKey: LISTS_QUERY_KEY });
+      toast.success("Lista creada");
     },
   });
 }
@@ -31,6 +31,7 @@ export function useDeleteList() {
     mutationFn: (id: string) => deleteList(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: LISTS_QUERY_KEY });
+      toast.success("Lista eliminada");
     },
   });
 }

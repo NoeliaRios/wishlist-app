@@ -11,6 +11,7 @@ interface Props {
   onUnreserve?: (id: string) => void;
   onPurchase?: (id: string) => void;
   currentUserId?: string;
+  isActing?: boolean;
 }
 
 const PRIORITY_LABEL = { 1: "Alta", 2: "Media", 3: "Baja" } as const;
@@ -28,6 +29,7 @@ export function WishItemCard({
   onUnreserve,
   onPurchase,
   currentUserId,
+  isActing = false,
 }: Props) {
   const priority = item.priority as 1 | 2 | 3;
   const isReservedByMe = item.reservedBy === currentUserId;
@@ -41,7 +43,6 @@ export function WishItemCard({
       );
     }
     if (item.status === "RESERVED") {
-      // El dueño no ve quién reservó — solo que está reservado
       if (isOwner) {
         return (
           <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
@@ -75,7 +76,7 @@ export function WishItemCard({
 
           {item.url && (
             
-             <a href={item.url}
+              <a href={item.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-blue-500 hover:underline"
@@ -90,40 +91,43 @@ export function WishItemCard({
         {isOwner && onDelete && item.status === "AVAILABLE" && (
           <button
             onClick={() => onDelete(item.id)}
-            className="text-gray-300 hover:text-red-400 transition-colors text-sm shrink-0"
+            disabled={isActing}
+            className="text-gray-300 hover:text-red-400 disabled:opacity-40 transition-colors text-sm shrink-0"
           >
             Eliminar
           </button>
         )}
       </div>
 
-      {/* Acciones para visitantes */}
       {!isOwner && (
         <div className="flex gap-2 mt-1">
           {item.status === "AVAILABLE" && onReserve && (
             <button
               onClick={() => onReserve(item.id)}
-              className="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+              disabled={isActing}
+              className="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Reservar
+              {isActing ? "Reservando..." : "Reservar"}
             </button>
           )}
 
           {item.status === "RESERVED" && isReservedByMe && onUnreserve && (
             <button
               onClick={() => onUnreserve(item.id)}
-              className="text-xs px-3 py-1.5 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              disabled={isActing}
+              className="text-xs px-3 py-1.5 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Cancelar reserva
+              {isActing ? "Cancelando..." : "Cancelar reserva"}
             </button>
           )}
 
           {item.status === "RESERVED" && isReservedByMe && onPurchase && (
             <button
               onClick={() => onPurchase(item.id)}
-              className="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors"
+              disabled={isActing}
+              className="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Marcar como comprado
+              {isActing ? "Guardando..." : "Marcar como comprado"}
             </button>
           )}
         </div>

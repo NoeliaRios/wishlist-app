@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { useSharedList, useItemActions } from "../hooks/useListDetail";
+import { useSharedList, useItemActions } from "../hooks/useItems";
 import { WishItemCard } from "../components/WishItemCard";
+import { useNavigate } from "react-router-dom";
 
 export default function SharedListPage() {
   const { token } = useParams<{ token: string }>();
   const { user } = useAuth();
   const { data: list, isLoading } = useSharedList(token!);
+  const navigate = useNavigate();
 
   // listId lo necesitamos para invalidar el cache después de una acción
   const { reserve, unreserve, purchase } = useItemActions(list?.id ?? "");
@@ -56,23 +58,36 @@ export default function SharedListPage() {
         </div>
 
         {!user && (
-          <div className="bg-blue-50 text-blue-700 text-sm px-4 py-3 rounded-lg mb-6">
-            Iniciá sesión para poder reservar o marcar items como comprados.
-          </div>
-        )}
+  <div className="bg-blue-50 border border-blue-100 text-sm px-4 py-3 rounded-lg mb-6 flex items-center justify-between gap-4">
+    <span className="text-blue-700">
+      Iniciá sesión para reservar o marcar items como comprados.
+    </span>
+    <button
+      onClick={() => navigate("/")}
+      className="text-sm font-medium text-blue-600 hover:text-blue-800 whitespace-nowrap transition-colors"
+    >
+      Iniciar sesión →
+    </button>
+  </div>
+)}
 
         <div className="flex flex-col gap-3">
           {list.items?.map((item) => (
-            <WishItemCard
-              key={item.id}
-              item={item}
-              isOwner={isOwner}
-              currentUserId={user?.id}
-              onReserve={user ? (id) => reserve.mutate(id) : undefined}
-              onUnreserve={user ? (id) => unreserve.mutate(id) : undefined}
-              onPurchase={user ? (id) => purchase.mutate(id) : undefined}
-            />
-          ))}
+  <WishItemCard
+    key={item.id}
+    item={item}
+    isOwner={isOwner}
+    currentUserId={user?.id}
+    isActing={
+      reserve.isPending ||
+      unreserve.isPending ||
+      purchase.isPending
+    }
+    onReserve={user ? (id) => reserve.mutate(id) : undefined}
+    onUnreserve={user ? (id) => unreserve.mutate(id) : undefined}
+    onPurchase={user ? (id) => purchase.mutate(id) : undefined}
+  />
+))}
         </div>
       </main>
     </div>
