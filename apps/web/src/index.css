@@ -1,1 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+
+  /* Paleta neobrutalist del mockup */
+  --color-brand-lilac:  #D6C7FF;
+  --color-brand-yellow: #FDFFB6;
+  --color-brand-cyan:   #9BF6FF;
+  --color-brand-coral:  #FFADAD;
+  --color-brand-green:  #CAFFBF;
+  --color-brand-orange: #FFD6A5;
+
+  /* Superficies */
+  --color-surface-base:   #F8F7FF;
+  --color-surface-card:   #FFFFFF;
+  --color-surface-border: #000000;
+
+  /* Contenido */
+  --color-content-primary:   #000000;
+  --color-content-secondary: #374151;
+  --color-content-muted:     #6B7280;
+  --color-content-inverse:   #FFFFFF;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface-base);
+    color: var(--color-content-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Clases neobrutalist */
+@utility neo-border {
+  border: 3px solid #000000;
+}
+
+@utility neo-border-lg {
+  border: 4px solid #000000;
+}
+
+@utility neo-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+@utility neo-shadow-lg {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
+
+@utility neo-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+@utility neo-interactive {
+  transition: all 0.15s ease;
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #000000;
+  }
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px #000000;
+  }
+}
+
+/* Tipografía semántica */
+@utility heading-1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+@utility heading-2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+@utility heading-3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+@utility body-base {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-content-secondary);
+}
+
+@utility label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-content-muted);
+  font-family: monospace;
+}

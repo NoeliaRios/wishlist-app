@@ -20,6 +20,9 @@ export interface WishList {
   isActive: boolean;
   shareToken: string;
   createdAt: string;
+  _count?: {
+    items: number;
+  };
 }
 
 export interface WishItem {
